@@ -1,4 +1,4 @@
-# Aulas teóricas de Circuitos digitais - Prof. Emílio
+# Aulas teóricas de circuitos digitais - Prof. Emílio
 
 Para acessar o conteúdo, é preciso ter o jupyter instalado. 
 O jupyter está disponível como pacote nas principais distribuições de linux.
