@@ -6,6 +6,8 @@ No windows, pode ser instalado usando o anaconda.
 
 Para abrir os arquivos, basta executar o comando
 
->>> jupyter notebook
+```
+jupyter notebook
+```
 
 E navegar até a pasta com os arquivos.
