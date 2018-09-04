@@ -18,7 +18,7 @@ def plotbdd(bdd):
         G.add_edge(pydot.Edge(str(a), str(b), color='blue'))
     for (a,b) in bdd.negedges():
         G.add_edge(pydot.Edge(str(a), str(b), color='red'))
-    
+
     display(Image(G.create(prog='dot', format='png')))
 
 
@@ -108,12 +108,22 @@ class BDD:
         ret = self
         if k in keep:
             ret = keep[k]
-        ret.pos = ret.pos.remove_identical(keep)
-        ret.neg = ret.neg.remove_identical(keep)
+        if ret.x != 0 and ret.x != 1:
+            ret.pos = ret.pos.remove_identical(keep)
+            ret.neg = ret.neg.remove_identical(keep)
         return ret
 
+    def get_item(self):
+        return ((self.x, self.pos.id, self.neg.id), self)
+
+    def get_items(self):
+        if self.x == 0 or self.x == 1:
+            return [self.get_item()]
+        return [self.get_item()] + self.neg.get_items() + self.pos.get_items()
+
     def simplify_identical(self):
-        keep = dict(((x, n.pos.id, n.neg.id), n) for (n, x) in bdd.nodes())
+        keep = dict(self.get_items())
+        return self.remove_identical(keep)
 
     def remove_redundant(self):
         if self.id == 0 or self.id == 1:
@@ -127,7 +137,7 @@ class BDD:
     def simplify(self):
         x = self
         r = True
-        while f:
+        while r:
             x = x.simplify_identical()
             r, x = x.remove_redundant()
 
