@@ -82,4 +82,40 @@ class BDD:
             return []
         return [(self.id, self.neg.id)] + self.neg.negedges() + self.pos.negedges()
 
+    def remove_identical(self, keep):
+        k = (self.x, self.pos.id, self.neg.id)
+        ret = self
+        if k in keep:
+            ret = keep[k]
+        ret.pos = ret.pos.remove_identical(keep)
+        ret.neg = ret.neg.remove_identical(keep)
+        return ret
 
+    def simplify_identical(self):
+        keep = dict(((x, n.pos.id, n.neg.id), n) for (n, x) in bdd.nodes())
+
+    def remove_redundant(self):
+        if self.id == 0 or self.id == 1:
+            return False, self
+        rpos, self.pos = self.pos.remove_redundant()
+        rneg, self.neg = self.neg.remove_redundant()
+        if self.pos.id == self.neg.id:
+            return True, self.pos
+        return rpos or rneg
+
+    def simplify(self):
+        x = self
+        r = True
+        while f:
+            x = x.simplify_identical()
+            r, x = x.remove_redundant()
+
+        return x
+
+ZERO = BDD(0)
+ZERO.neg = ZERO
+ZERO.pos = ZERO
+
+ONE = BDD(1)
+ONE.neg = ONE
+ONE.pos = ONE
