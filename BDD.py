@@ -1,5 +1,26 @@
 import networkx as nx
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
+import pydot
+from IPython.display import Image
+
+def plotbdd(bdd):
+    G = pydot.Dot()
+    G.set_type("digraph")
+    for (i, x) in bdd.nodes():
+        if x == 0:
+            G.add_node(pydot.Node(str(i), label=str(x), shape="rectangle", color="red"))
+        if x == 1:
+            G.add_node(pydot.Node(str(i), label=str(x), shape="rectangle", color="blue"))
+        else:
+            G.add_node(pydot.Node(str(i), label=str(x)))
+
+    for (a,b) in bdd.posedges():
+        G.add_edge(pydot.Edge(str(a), str(b), color='blue'))
+    for (a,b) in bdd.negedges():
+        G.add_edge(pydot.Edge(str(a), str(b), color='red'))
+    
+    display(Image(G.create(prog='dot', format='png')))
+
 
 def genid():
     i = 2
