@@ -42,6 +42,14 @@ class BDD:
         else:
             self.id = next(ids)
 
+    def negate(self):
+        if self.x == 0:
+            return ONE
+        if self.x == 1:
+            return ZERO
+        return BDD(self.x, self.pos.negate(), self.neg.negate())
+
+
     def lor(self, other):
         if self.x == 0:
             return other
