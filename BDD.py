@@ -151,6 +151,21 @@ class BDD:
         self.pos.remove_redundant()
         self.neg.remove_redundant()
 
+    def __eq__(self, o):
+        if self.x == 0 and o.x == 0:
+            return True
+        if self.x == 1 and o.x == 1:
+            return True
+
+        return self.x == o.x and self.neg == o.neg and self.pos == o.pos
+
+def check(a, b):
+
+    za = simplify(a)
+    zb = simplify(b)
+
+    return a == b
+
 def simplify(z):
 
     for h in range(z.height()):
