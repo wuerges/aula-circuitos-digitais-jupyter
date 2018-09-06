@@ -140,16 +140,19 @@ class BDD:
 
     def remove_redundant(self):
         if self.x == 0 or self.x == 1:
-            return
+            return self
 
-        if self.pos.id == self.neg.id:
-            self.pos = self.pos.pos
-            self.neg = self.pos.neg
-            self.x = self.pos.x
-            self.id = self.pos.id
+        if self.pos == self.neg:
+            return self.pos.remove_redundant()
 
-        self.pos.remove_redundant()
-        self.neg.remove_redundant()
+            #self.pos = self.pos.pos
+            #self.neg = self.pos.neg
+            #self.x = self.pos.x
+            #self.id = self.pos.id
+
+        return BDD(self.x, self.neg.remove_redundant(), self.pos.remove_redundant())
+        #self.pos.remove_redundant()
+        #self.neg.remove_redundant()
 
     def __eq__(self, o):
         if self.x == 0 and o.x == 0:
@@ -164,13 +167,13 @@ def check(a, b):
     za = simplify(a)
     zb = simplify(b)
 
-    return a == b
+    return za == zb
 
 def simplify(z):
 
     for h in range(z.height()):
         #phase 1: remove redundant
-        z.remove_redundant()
+        z = z.remove_redundant()
 
         #phase 2: remove equals
         bdds = z.get_items()
