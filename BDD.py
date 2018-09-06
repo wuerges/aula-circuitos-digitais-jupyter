@@ -47,7 +47,7 @@ class BDD:
             return ONE
         if self.x == 1:
             return ZERO
-        return BDD(self.x, self.pos.negate(), self.neg.negate())
+        return BDD(self.x, self.neg.negate(), self.pos.negate())
 
 
     def lor(self, other):
