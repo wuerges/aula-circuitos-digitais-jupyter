@@ -1,5 +1,5 @@
 import networkx as nx
-#from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import pydot
 from IPython.display import Image
 
@@ -167,6 +167,11 @@ def check(a, b):
     za = simplify(a)
     zb = simplify(b)
 
+    print("LEFT:")
+    plotbdd(za)
+    print("RIGHT:")
+    plotbdd(zb)
+    print("RESULT:", za == zb)
     return za == zb
 
 def simplify(z):
