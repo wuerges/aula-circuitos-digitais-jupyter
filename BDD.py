@@ -121,40 +121,61 @@ class BDD:
             ret.neg = ret.neg.remove_identical(keep)
         return ret
 
+    def get_key(self):
+        return (self.x, self.pos.id, self.neg.id)
+
     def get_item(self):
-        return ((self.x, self.pos.id, self.neg.id), self)
+        return (self.get_key(), self)
 
     def get_items(self):
         if self.x == 0 or self.x == 1:
             return [self.get_item()]
         return [self.get_item()] + self.neg.get_items() + self.pos.get_items()
 
-    def simplify_identical(self):
-        keep = dict(self.get_items())
-        return self.remove_identical(keep)
+    def height(self):
+        if self.x == 0 or self.x == 1:
+            return 1
+        else:
+            return 1 + max(self.neg.height(), self.pos.height())
 
     def remove_redundant(self):
-        if self.id == 0 or self.id == 1:
-            return False, self
-        rpos, self.pos = self.pos.remove_redundant()
-        rneg, self.neg = self.neg.remove_redundant()
+        if self.x == 0 or self.x == 1:
+            return
+
         if self.pos.id == self.neg.id:
-            return True, self.pos
-        return rpos or rneg
+            self.pos = self.pos.pos
+            self.neg = self.pos.neg
+            self.x = self.pos.x
+            self.id = self.pos.id
 
-    def simplify(self):
-        x = self
-        r = True
-        while r:
-            x = x.simplify_identical()
-            r, x = x.remove_redundant()
+        self.pos.remove_redundant()
+        self.neg.remove_redundant()
 
-        return x
+def simplify(z):
+
+    for h in range(z.height()):
+        #phase 1: remove redundant
+        z.remove_redundant()
+
+        #phase 2: remove equals
+        bdds = z.get_items()
+        x = {}
+        for k, v in bdds:
+            if not k in bdds:
+                x[k] = v
+        for k, v in x.items():
+            v.pos = x[v.pos.get_key()]
+            v.neg = x[v.neg.get_key()]
+
+    return z
+
 
 ZERO = BDD(0)
 ZERO.neg = ZERO
 ZERO.pos = ZERO
+ZERO.id = 0
 
 ONE = BDD(1)
 ONE.neg = ONE
 ONE.pos = ONE
+ONE.id = 1
