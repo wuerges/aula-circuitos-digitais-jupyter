@@ -1,7 +1,8 @@
 import networkx as nx
-#from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import pydot
-from IPython.display import Image
+from IPython.display import Image, display
+
 
 def plotbdd(bdd):
     G = pydot.Dot()
@@ -14,9 +15,9 @@ def plotbdd(bdd):
         else:
             G.add_node(pydot.Node(str(i), label=str(x)))
 
-    for (a,b) in bdd.posedges():
+    for (a, b) in bdd.posedges():
         G.add_edge(pydot.Edge(str(a), str(b), color='blue'))
-    for (a,b) in bdd.negedges():
+    for (a, b) in bdd.negedges():
         G.add_edge(pydot.Edge(str(a), str(b), color='red'))
 
     display(Image(G.create(prog='dot', format='png')))
@@ -28,7 +29,9 @@ def genid():
         yield i
         i += 1
 
+
 ids = genid()
+
 
 class BDD:
     def __init__(self, x, neg=None, pos=None):
@@ -39,7 +42,7 @@ class BDD:
             self.id = 0
         if self.x == 1:
             self.id = 1
-        else:
+        if self.x != 1 and self.x != 0:
             self.id = next(ids)
 
     def negate(self):
@@ -48,7 +51,6 @@ class BDD:
         if self.x == 1:
             return ZERO
         return BDD(self.x, self.pos.negate(), self.neg.negate())
-
 
     def lor(self, other):
         if self.x == 0:
@@ -82,13 +84,13 @@ class BDD:
 
     def print(self, d=0):
         if self.x == 0:
-            print(" "*d, "zero")
+            print(" " * d, "zero")
         elif self.x == 1:
-            print(" "*d, "one")
+            print(" " * d, "one")
         else:
-            self.pos.print(d+2)
-            print(" "*d, self.x)
-            self.neg.print(d+2)
+            self.pos.print(d + 2)
+            print(" " * d, self.x)
+            self.neg.print(d + 2)
 
     def nodes(self):
         if self.x == 0:
@@ -151,10 +153,11 @@ class BDD:
 
         return x
 
+
 ZERO = BDD(0)
-ZERO.neg = ZERO
-ZERO.pos = ZERO
+# ZERO.neg = ZERO
+# ZERO.pos = ZERO
 
 ONE = BDD(1)
-ONE.neg = ONE
-ONE.pos = ONE
+# ONE.neg = ONE
+# ONE.pos = ONE
