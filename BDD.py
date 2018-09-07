@@ -1,5 +1,3 @@
-import networkx as nx
-#from matplotlib import pyplot as plt
 import pydot
 from IPython.display import Image, display
 
