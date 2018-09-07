@@ -155,9 +155,9 @@ class BDD:
 
 
 ZERO = BDD(0)
-# ZERO.neg = ZERO
-# ZERO.pos = ZERO
+ZERO.neg = ZERO
+ZERO.pos = ZERO
 
 ONE = BDD(1)
-# ONE.neg = ONE
-# ONE.pos = ONE
+ONE.neg = ONE
+ONE.pos = ONE
