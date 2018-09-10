@@ -16,7 +16,7 @@ def plotbdd(bdd):
     for (a, b) in bdd.posedges():
         G.add_edge(pydot.Edge(str(a), str(b), color='blue'))
     for (a, b) in bdd.negedges():
-        G.add_edge(pydot.Edge(str(a), str(b), color='red'))
+        G.add_edge(pydot.Edge(str(a), str(b), color='red', style='dashed'))
 
     display(Image(G.create(prog='dot', format='png')))
 
